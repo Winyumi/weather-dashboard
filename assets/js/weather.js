@@ -122,9 +122,9 @@ $(document).ready(function() {
                     }
                 }),
                 $("<input>").attr("type","radio").attr("name","units").val("metric").prop("checked",true),
-                "&deg;C",
+                "°C",
                 $("<input>").attr("type","radio").attr("name","units").val("imperial"),
-                "&deg;F"
+                "°F"
 
             ),
             // Lookup History
