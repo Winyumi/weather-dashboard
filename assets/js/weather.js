@@ -3,15 +3,14 @@
 $(document).ready(function() {
 
     // Set up variables
+    const APIKey = "881091f5dbf0a74515e188d5cd71376f";
     var weatherData, forecastData;
-    // var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    var history = [];
     var units = {
         active: "metric",
         metric: { temp: "°C", speed: "m/s" },
         imperial: { temp: "°F", speed: "mph" }
     };
-    const APIKey = "881091f5dbf0a74515e188d5cd71376f";
+    var history = [];
 
     init();
 
@@ -72,7 +71,7 @@ $(document).ready(function() {
             // Lookup Field
             $("<div>").attr("id","lookup").append(
                 $("<input>").attr("type","text").keydown(function(event) {
-                    if ($(this).val() && (event.key == "Enter")) {
+                    if ($(this).val() && event.key == "Enter") {
                         $(this).blur();
                         getWeather($(this).val());
                     }
