@@ -112,30 +112,35 @@ $(document).ready(function() {
         // Set up UI
         $("#dashboard").append(
             // Lookup Field
-            $("<div>").attr("id","lookup").append(
-                $("<input>").attr("type","text").keydown(function(event) {
-                    if ($(this).val() && event.key == "Enter") {
-                        $(this).blur();
-                        lookupCity($(this).val());
-                    }
-                }),
-                $("<button>").text("Lookup").on("click", function() {
-                    if ($("#lookup input").val()) {
-                        lookupCity($("#lookup input").val());
-                    }
-                }),
-                $("<input>").attr("type","radio").attr("name","units").val("metric").prop("checked",true),
-                "°C",
-                $("<input>").attr("type","radio").attr("name","units").val("imperial"),
-                "°F"
-
+            $("<aside>").append(
+                $("<div>").attr("id","lookup").append(
+                    $("<input>").attr("type","text").keydown(function(event) {
+                        if ($(this).val() && event.key == "Enter") {
+                            $(this).blur();
+                            lookupCity($(this).val());
+                        }
+                    }),
+                    $("<button>").text("Lookup").on("click", function() {
+                        if ($("#lookup input").val()) {
+                            lookupCity($("#lookup input").val());
+                        }
+                    }),
+                    $("<div>").attr("id","units").append(
+                        $("<input>").attr("type","radio").attr("name","units").attr("id","metric").val("metric").prop("checked",true),
+                        $("<label>").attr("for","metric").text("°C"),
+                        $("<input>").attr("type","radio").attr("name","units").attr("id","imperial").val("imperial"),
+                        $("<label>").attr("for","imperial").text("°F")
+                    )
+                ),
+                // Lookup History
+                $("<div>").attr("id","history")
             ),
-            // Lookup History
-            $("<div>").attr("id","history"),
-            // Current Weather
-            $("<div>").attr("id","weather"),
-            // 5-Day Forecast
-            $("<div>").attr("id","forecast")
+            $("<main>").append(
+                // Current Weather
+                $("<div>").attr("id","weather"),
+                // 5-Day Forecast
+                $("<div>").attr("id","forecast")
+            )
         );
     }
 

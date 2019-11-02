@@ -1,2 +1,20 @@
 @charset "utf-8";
 
+#dashboard {
+    display: flex;
+}
+
+#dashboard aside {
+    flex: 30%;
+    flex-direction: column;
+}
+
+#dashboard main {
+    flex: 70%;
+    flex-direction: column;
+}
+
+#dashboard main #forecast {
+    display: flex;
+    justify-content: space-between;
+}
