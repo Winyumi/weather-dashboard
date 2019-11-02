@@ -12,13 +12,15 @@ $(document).ready(function() {
         imperial: { temp: "°F", speed: "mph" }
     };
     var history = [];
+    var test = window.location.search.match(/test/gi) ? true : false;
 
     init();
 
     function init() {
         // Call all functions that set up the interface
         buildUI();
-        if (window.location.search.match(/test/gi)) {
+
+        if (test) {
             $("#lookup input").val("London");
             lookupCity();
         }
@@ -29,7 +31,7 @@ $(document).ready(function() {
 
         units.active = $("#lookup input[name='units']:checked").val();
 
-        if (window.location.search.match(/test/gi)) {
+        if (test) {
 
             // Test mode for offline testing
             units.active = "default";
