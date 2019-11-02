@@ -146,15 +146,18 @@ $(document).ready(function() {
     function displayForecast() {
         // Display 5-day forecast of queried location
         $("#forecast").empty();
-        for (let i = 0; i < 5; i++) {
-            var d = new Date(forecastData.list[i*8+5].dt*1000);
-            $("#forecast").append(
-                $("<h2>").text(`${d.getMonth()+1}/${d.getDate()}`),
-                $("<p>").text(`Weather: ${forecastData.list[i].weather[0].description} ${forecastData.list[i].weather[0].icon}`),
-                $("<p>").text(`Temperature: ${forecastData.list[i].main.temp + units[units.active].temp}`),
-                $("<p>").text(`Humidity: ${forecastData.list[i].main.humidity}%`)
-            );
-            console.log(d);
+        for (let i = 0; i < forecastData.list.length; i++) {
+            var d = new Date(forecastData.list[i].dt*1000);
+            var t = d.getUTCHours() + forecastData.city.timezone/60/60;
+            if (t >= 11 && t <= 13) {
+                $("#forecast").append(
+                    $("<h2>").text(`${d.getMonth()+1}/${d.getDate()}`),
+                    $("<p>").text(`Weather: ${forecastData.list[i].weather[0].description} ${forecastData.list[i].weather[0].icon}`),
+                    $("<p>").text(`Temperature: ${forecastData.list[i].main.temp + units[units.active].temp}`),
+                    $("<p>").text(`Humidity: ${forecastData.list[i].main.humidity}%`)
+                );
+                console.log(`Forecast[${i}]:`, "\n  dt_txt: " + forecastData.list[i].dt_txt, "\n  local: " + d);
+            }
         }
     }
 
