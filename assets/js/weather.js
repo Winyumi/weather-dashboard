@@ -71,7 +71,9 @@ $(document).ready(function() {
                     }
                 }),
                 $("<button>").text("Lookup").on("click", function() {
-                    getWeather($("#lookup input").val());
+                    if ($("#lookup input").val()) {
+                        getWeather($("#lookup input").val());
+                    }
                 }),
                 $("<input>").attr("type","radio").attr("name","units").val("metric").attr("checked",true),
                 "&deg;C",
