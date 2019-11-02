@@ -20,7 +20,7 @@ $(document).ready(function() {
         buildUI();
     }
 
-    function getWeather(city) {
+    function lookupCity(city) {
         // Make API call to query for the location
 
         units.active = $("#lookup input[name='units']:checked").val();
@@ -39,39 +39,62 @@ $(document).ready(function() {
 
         } else {
 
-            // Get current weather
-            var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=" + units.active + "&appid=" + APIKey;
-            $.ajax({
-                url: queryURL,
-                method: "GET"
-            }).then(function(response) {
-                weatherData = response;
-                console.log("Today's Weather: ", weatherData);
-                // Get UV Index
-                var queryURL = "https://api.openweathermap.org/data/2.5/uvi?lat=" + weatherData.coord.lat + "&lon=" + weatherData.coord.lon + "&appid=" + APIKey;
-                $.ajax({
-                    url: queryURL,
-                    method: "GET"
-                }).then(function(response) {
-                    UVIndexData = response;
-                    console.log("UV Index: ", UVIndexData);
+            getWeather(city, function() {
+                getUVIndex(weatherData.coord.lat, weatherData.coord.lon, function() {
                     displayWeather();
+                });
+                getForecast(weatherData.id, function() {
+                    displayForecast();
                 })
-            })
-
-            // Get 5-day forecast
-            var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=" + units.active + "&appid=" + APIKey;
-            $.ajax({
-                url: queryURL,
-                method: "GET"
-            }).then(function(response) {
-                forecastData = response;
-                console.log("5-Day Forecast: ", forecastData);
-                displayForecast();
-            })
+            });
 
         }
         // Save to search history if not exists
+    }
+
+    function getWeather(city, callback) {
+        // Get current weather by city
+        var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=" + units.active + "&appid=" + APIKey;
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function(response) {
+            weatherData = response;
+            console.log("Today's Weather: ", weatherData);
+            if (callback && typeof(callback) === "function") {
+                callback();
+            }
+        });
+    }
+
+    function getUVIndex(lat, lon, callback) {
+        // Get UV Index by latitude and longitude
+        var queryURL = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function(response) {
+            UVIndexData = response;
+            console.log("UV Index: ", UVIndexData);
+            if (callback && typeof(callback) === "function") {
+                callback();
+            }
+        });
+    }
+
+    function getForecast(id, callback) {
+        // Get 5-day forecast by city ID to avoid ambiguity
+        var queryURL = "https://api.openweathermap.org/data/2.5/forecast?id=" + id + "&units=" + units.active + "&appid=" + APIKey;
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function(response) {
+            forecastData = response;
+            console.log("5-Day Forecast: ", forecastData);
+            if (callback && typeof(callback) === "function") {
+                callback();
+            }
+        });
     }
 
 
@@ -85,12 +108,12 @@ $(document).ready(function() {
                 $("<input>").attr("type","text").keydown(function(event) {
                     if ($(this).val() && event.key == "Enter") {
                         $(this).blur();
-                        getWeather($(this).val());
+                        lookupCity($(this).val());
                     }
                 }),
                 $("<button>").text("Lookup").on("click", function() {
                     if ($("#lookup input").val()) {
-                        getWeather($("#lookup input").val());
+                        lookupCity($("#lookup input").val());
                     }
                 }),
                 $("<input>").attr("type","radio").attr("name","units").val("metric").prop("checked",true),
