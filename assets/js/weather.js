@@ -18,6 +18,10 @@ $(document).ready(function() {
     function init() {
         // Call all functions that set up the interface
         buildUI();
+        if (window.location.search.match(/test/gi)) {
+            $("#lookup input").val("London");
+            lookupCity();
+        }
     }
 
     function lookupCity(city) {
@@ -157,15 +161,17 @@ $(document).ready(function() {
             var t = d.getUTCHours() + forecastData.city.timezone/60/60;
             if (t >= 11 && t <= 13) {
                 $("#forecast").append(
-                    $("<h2>").text(`${d.getMonth()+1}/${d.getDate()}`),
-                    $("<p>").append(
-                        $("<img>")
-                        .attr("src", `http://openweathermap.org/img/wn/${forecastData.list[i].weather[0].icon}.png`)
-                        .attr("alt", `${titleCase(forecastData.list[i].weather[0].description)}`)
-                        .attr("title", `${titleCase(forecastData.list[i].weather[0].description)}`)
-                    ),
-                    $("<p>").text(`Temperature: ${forecastData.list[i].main.temp + units[units.active].temp}`),
-                    $("<p>").text(`Humidity: ${forecastData.list[i].main.humidity}%`)
+                    $("<div>").append(
+                        $("<h2>").text(`${d.getMonth()+1}/${d.getDate()}`),
+                        $("<p>").append(
+                            $("<img>")
+                            .attr("src", `http://openweathermap.org/img/wn/${forecastData.list[i].weather[0].icon}.png`)
+                            .attr("alt", `${titleCase(forecastData.list[i].weather[0].description)}`)
+                            .attr("title", `${titleCase(forecastData.list[i].weather[0].description)}`)
+                        ),
+                        $("<p>").text(`Temperature: ${forecastData.list[i].main.temp + units[units.active].temp}`),
+                        $("<p>").text(`Humidity: ${forecastData.list[i].main.humidity}%`)
+                    )
                 );
                 console.log(`Forecast[${i}]:`, "\n  dt_txt: " + forecastData.list[i].dt_txt, "\n  local: " + d);
             }
