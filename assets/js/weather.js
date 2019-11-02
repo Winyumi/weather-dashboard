@@ -75,7 +75,7 @@ $(document).ready(function() {
                         getWeather($("#lookup input").val());
                     }
                 }),
-                $("<input>").attr("type","radio").attr("name","units").val("metric").attr("checked",true),
+                $("<input>").attr("type","radio").attr("name","units").val("metric").prop("checked",true),
                 "&deg;C",
                 $("<input>").attr("type","radio").attr("name","units").val("imperial"),
                 "&deg;F"
