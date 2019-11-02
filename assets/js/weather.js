@@ -6,6 +6,11 @@ $(document).ready(function() {
     var weatherData, forecastData;
     // var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     var history = [];
+    var units = {
+        active: "metric",
+        metric: { temp: "°C", speed: "m/s" },
+        imperial: { temp: "°F", speed: "mph" }
+    };
     const APIKey = "881091f5dbf0a74515e188d5cd71376f";
 
     init();
@@ -17,6 +22,8 @@ $(document).ready(function() {
 
     function getWeather(city) {
         // Make API call to query for the location
+
+        units.active = $("#lookup input[name='units']:checked").val();
 
         if (window.location.search.match(/test/gi)) {
 
@@ -32,7 +39,7 @@ $(document).ready(function() {
         } else {
 
             // Get current weather
-            var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
+            var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=" + units.active + "&appid=" + APIKey;
             $.ajax({
                 url: queryURL,
                 method: "GET"
@@ -42,7 +49,7 @@ $(document).ready(function() {
                 displayWeather();
             })
             // Get 5-day forecast
-            var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=" + ("metric") + "&appid=" + APIKey;
+            var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=" + units.active + "&appid=" + APIKey;
             $.ajax({
                 url: queryURL,
                 method: "GET"
@@ -95,9 +102,9 @@ $(document).ready(function() {
         $("#weather").empty().append(
             $("<h1>").text(weatherData.name),
             $("<p>").text(`Weather: ${weatherData.weather[0].description} ${weatherData.weather[0].icon}`),
-            $("<p>").text(`Temperature: ${weatherData.main.temp}`),
+            $("<p>").text(`Temperature: ${weatherData.main.temp + units[units.active].temp}`),
             $("<p>").text(`Humidity: ${weatherData.main.humidity}%`),
-            $("<p>").text(`Wind Speed: ${weatherData.wind.speed}`),
+            $("<p>").text(`Wind Speed: ${weatherData.wind.speed} ${units[units.active].speed}`),
             $("<p>").text(`UV Index: `)
         );
     }
@@ -110,7 +117,7 @@ $(document).ready(function() {
             $("#forecast").append(
                 $("<h2>").text(`${d.getMonth()+1}/${d.getDate()}`),
                 $("<p>").text(`Weather: ${forecastData.list[i].weather[0].description} ${forecastData.list[i].weather[0].icon}`),
-                $("<p>").text(`Temperature: ${forecastData.list[i].main.temp}`),
+                $("<p>").text(`Temperature: ${forecastData.list[i].main.temp + units[units.active].temp}`),
                 $("<p>").text(`Humidity: ${forecastData.list[i].main.humidity}%`)
             );
             console.log(d);
