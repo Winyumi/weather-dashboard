@@ -1,5 +1,45 @@
 @charset "utf-8";
 
+body {
+    background: #eee;
+}
+
+#dashboard {
+    margin: 10px 0 10px 10px;
+}
+
+#dashboard aside {
+    margin: 0 10px 0 0;
+}
+
+#dashboard #weather {
+    margin: 0 10px 10px 0;
+    padding: 10px;
+    background: #ffffff;
+}
+
+#dashboard #forecast {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+#dashboard #forecast div {
+    flex: 0 0 calc(50% - 10px);
+    box-sizing: border-box;
+    margin: 0 10px 10px 0;
+    padding: 10px;
+    background: #ffffff;
+}
+
+@media only screen and (min-width: 420px) {
+
+    #dashboard #forecast div {
+        flex: 0 0 calc(33.3333% - 10px);
+    }
+
+}
+
 @media only screen and (min-width: 600px) {
 
     #dashboard {
@@ -7,18 +47,22 @@
     }
 
     #dashboard aside {
-        flex: 35%;
+        flex: 30%;
+        max-width: 250px;
         flex-direction: column;
     }
 
     #dashboard main {
-        flex: 65%;
+        flex: 70%;
         flex-direction: column;
     }
 
-    #dashboard main #forecast {
-        display: flex;
-        justify-content: space-between;
+}
+
+@media only screen and (min-width: 1000px) {
+
+    #dashboard #forecast div {
+        flex: 0 0 calc(20% - 10px);
     }
 
 }
