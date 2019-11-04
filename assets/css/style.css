@@ -12,6 +12,19 @@ body {
     margin: 0 10px 0 0;
 }
 
+#dashboard #lookup input[type="text"] {
+    width: 80%;
+    float: left;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#dashboard #lookup button {
+    width: 20%;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
 #dashboard #weather {
     margin: 0 10px 10px 0;
     padding: 10px;
