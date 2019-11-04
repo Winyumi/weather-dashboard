@@ -107,42 +107,70 @@ $(document).ready(function() {
         // Set up UI
         $("#dashboard").append(
             $("<aside>").append(
-                $("<div>").attr("id","lookup").append(
+                $("<div>", { id: "lookup" })
+                .append(
                     // Lookup Field
-                    $("<input>").attr("type","text").addClass("form-control").keydown(function(event) {
+                    $("<input>", {
+                        type: "text",
+                        class: "form-control"
+                    })
+                    .keydown(function(event) {
                         if ($(this).val() && event.key == "Enter") {
                             $(this).blur();
                             lookupCity($(this).val());
                         }
                     }),
                     // Lookup Button
-                    $("<button>").addClass("btn btn-primary").text("Lookup").on("click", function() {
+                    $("<button>", { class: "btn btn-primary" })
+                    .html(`<i class="fas fa-search"></i>`)
+                    .on("click", function() {
                         if ($("#lookup input").val()) {
                             lookupCity($("#lookup input").val());
                         }
                     }),
                     // Unit Options
-                    $("<div>").attr("id","units").append(
-                        $("<label>").append(
-                            $("<input>")
-                            .attr("type","radio").attr("name","units")
-                            .val("metric").prop("checked",true),"°C"
+                    $("<div>", { id: "units" })
+                    .append(
+
+                        $("<div>", { class: "form-check form-check-inline" })
+                        .append(
+                            $("<input>", {
+                                type: "radio",
+                                name: "units",
+                                id: "metric",
+                                class: "form-check-input",
+                                value: "metric",
+                                checked: true
+                            }),
+                            $("<label>", {
+                                for: "metric",
+                                class: "form-check-label"
+                            }).text("°C")
                         ),
-                        $("<label>").append(
-                            $("<input>")
-                            .attr("type","radio").attr("name","units")
-                            .val("imperial"),"°F"
+                        $("<div>", { class: "form-check form-check-inline" })
+                        .append(
+                            $("<input>", {
+                                type: "radio",
+                                name: "units",
+                                id: "imperial",
+                                class: "form-check-input",
+                                value: "imperial"
+                            }),
+                            $("<label>", {
+                                for: "imperial",
+                                class: "form-check-label"
+                            }).text("°F")
                         )
                     )
                 ),
                 // Lookup History
-                $("<div>").attr("id","history")
+                $("<div>", { id: "history" })
             ),
             $("<main>").append(
                 // Current Weather
-                $("<div>").attr("id","weather"),
+                $("<div>", { id: "weather" }),
                 // 5-Day Forecast
-                $("<div>").attr("id","forecast")
+                $("<div>", { id: "forecast" })
             )
         );
     }
