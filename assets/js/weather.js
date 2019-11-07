@@ -56,7 +56,7 @@ $(document).ready(function() {
             loadTestData();
             displayWeather();
             displayForecast();
-            saveHistory(weatherData.name);
+            saveHistory(weatherData.name, weatherData.sys.country);
             displayHistory();
 
         } else {
@@ -68,7 +68,7 @@ $(document).ready(function() {
                 getForecast(weatherData.id, function() {
                     displayForecast();
                 });
-                saveHistory(weatherData.name);
+                saveHistory(weatherData.name, weatherData.sys.country);
                 displayHistory();
             });
 
@@ -282,8 +282,9 @@ $(document).ready(function() {
         }
     }
 
-    function saveHistory(city) {
+    function saveHistory(city, country) {
         // Add queried city to lookup history if not exists
+        var city = city + ", " + country;
         if (!histy.lookups.includes(city)) {
             histy.lookups.unshift(city);
             if (histy.lookups.length > histy.limit) {
