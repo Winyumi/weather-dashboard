@@ -245,7 +245,10 @@ $(document).ready(function() {
 
     function displayHistory() {
         if (histy.lookups.length > 0) {
-            $("#history").empty().html(`<b>Recent Lookups</b>`);
+            $("#history").empty().append(
+                $("<b>").text("Recent Lookups"),
+                $("<span>", { class: "clear" }).text("Clear").click(function() { clearHistory(); })
+            );
             $.each(histy.lookups, function(index, item) {
                 $("#history").append(
                     $("<li>").text(item).click(function() {
@@ -254,10 +257,7 @@ $(document).ready(function() {
                 );
             });
             $("#history").append(
-                $("<div>", { class: "clear" }).text("Clear")
-                .click(function() {
-                    clearHistory();
-                })
+
             );
         }
     }

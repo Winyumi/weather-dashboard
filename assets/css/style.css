@@ -27,6 +27,30 @@ body {
     padding-right: 0;
 }
 
+#dashboard #history {
+    margin: 1em 0;
+    cursor: default;
+}
+#dashboard #history li {
+    list-style: none;
+    margin: 2px 0;
+    padding: 3px 6px;
+    background: white;
+}
+#dashboard #history li:hover {
+    cursor: pointer;
+    background: #ffffffaa;
+}
+#dashboard #history .clear {
+    font-size: 80%;
+    color: #999;
+    margin: 0 0 0 8px;
+}
+#dashboard #history .clear:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 #dashboard #weather {
     margin: 0 10px 10px 0;
     padding: 10px;
