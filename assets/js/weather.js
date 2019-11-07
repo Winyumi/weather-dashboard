@@ -4,7 +4,7 @@ $(document).ready(function() {
 
     // Set up variables
     const APIKey = "881091f5dbf0a74515e188d5cd71376f";
-    var weatherData, UVIndexData, forecastData;
+    var lookupCoordsResult, weatherData, UVIndexData, forecastData;
     var units = {
         active: "metric",
         default: { temp: "K", speed: "m/s" },
@@ -29,6 +29,13 @@ $(document).ready(function() {
         displayHistory();
         if (histy.lookups[0]) {
             lookupCity(histy.lookups[0]);
+        } else if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                console.log(position);
+                lookupCoords(position.coords.latitude, position.coords.longitude, function() {
+                    lookupCity(lookupCoordsResult);
+                });
+            });
         }
 
         if (test) {
@@ -61,17 +68,30 @@ $(document).ready(function() {
                 getForecast(weatherData.id, function() {
                     displayForecast();
                 });
-
                 saveHistory(weatherData.name);
                 displayHistory();
             });
 
         }
-        // Save to search history if not exists
+    }
+
+    function lookupCoords(lat, lon, callback) {
+        // Get coords of city
+        var queryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&units=" + units.active + "&appid=" + APIKey;
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function(response) {
+            lookupCoordsResult = response.name + "," + response.sys.country;
+            if (callback && typeof(callback) === "function") {
+                callback();
+            }
+        });
+
     }
 
     function getWeather(city, callback) {
-        // Get current weather by city
+        // Get current weather by coords
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=" + units.active + "&appid=" + APIKey;
         $.ajax({
             url: queryURL,
