@@ -11,7 +11,11 @@ $(document).ready(function() {
         metric: { temp: "°C", speed: "m/s" },
         imperial: { temp: "°F", speed: "mph" }
     };
-    var history = [];
+    var histy = {
+        units: "metric",
+        limit: 5,
+        lookups: []
+    };
 
     // Test mode for offline testing
     var test = window.location.search.match(/test/gi) ? true : false;
@@ -21,6 +25,11 @@ $(document).ready(function() {
     function init() {
         // Call all functions that set up the interface
         buildUI();
+        getHistory();
+        displayHistory();
+        if (histy.lookups[0]) {
+            lookupCity(histy.lookups[0]);
+        }
 
         if (test) {
             // Test mode
@@ -32,6 +41,7 @@ $(document).ready(function() {
     function lookupCity(city) {
         // Make API call to query for the location
 
+        $("#lookup input[type='text']").val(city);
         units.active = $("#lookup input[name='units']:checked").val();
 
         if (test) {
@@ -39,6 +49,8 @@ $(document).ready(function() {
             loadTestData();
             displayWeather();
             displayForecast();
+            saveHistory(weatherData.name);
+            displayHistory();
 
         } else {
 
@@ -48,7 +60,10 @@ $(document).ready(function() {
                 });
                 getForecast(weatherData.id, function() {
                     displayForecast();
-                })
+                });
+
+                saveHistory(weatherData.name);
+                displayHistory();
             });
 
         }
@@ -178,7 +193,7 @@ $(document).ready(function() {
     function displayWeather() {
         // Display weather of queried location
         $("#weather").empty().append(
-            $("<h1>").text(weatherData.name),
+            $("<h1>").text(weatherData.name + ", " + weatherData.sys.country),
             $("<p>").append(
                 $("<img>")
                 .attr("src", `http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`)
@@ -217,15 +232,51 @@ $(document).ready(function() {
         }
     }
 
+
+    // History functions
+
     function getHistory() {
         // Check if lookup history exists
-        if (localStorage.weather) {
-            history = JSON.parse(localStorage.weather).history;
+        console.log("Getting history...");
+        if (localStorage.getItem('weather')) {
+            histy = JSON.parse(localStorage.getItem('weather'));
         }
     }
 
-    function updateHistory(city) {
+    function displayHistory() {
+        if (histy.lookups.length > 0) {
+            $("#history").empty().html(`<b>Recent Lookups</b>`);
+            $.each(histy.lookups, function(index, item) {
+                $("#history").append(
+                    $("<li>").text(item).click(function() {
+                        lookupCity(item);
+                    })
+                );
+            });
+            $("#history").append(
+                $("<div>", { class: "clear" }).text("Clear")
+                .click(function() {
+                    clearHistory();
+                })
+            );
+        }
+    }
+
+    function saveHistory(city) {
         // Add queried city to lookup history if not exists
+        if (!histy.lookups.includes(city)) {
+            histy.lookups.unshift(city);
+            if (histy.lookups.length > histy.limit) {
+                histy.lookups.pop();
+            }
+            localStorage.setItem("weather", JSON.stringify(histy));
+        }
+    }
+
+    function clearHistory() {
+        histy.lookups.splice(0, histy.lookups.length);
+        localStorage.setItem("weather", JSON.stringify(histy));
+        $("#history").empty();
     }
 
 
