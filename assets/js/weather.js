@@ -223,8 +223,24 @@ $(document).ready(function() {
             $("<p>").text(`Temperature: ${weatherData.main.temp + units[units.active].temp}`),
             $("<p>").text(`Humidity: ${weatherData.main.humidity}%`),
             $("<p>").text(`Wind Speed: ${weatherData.wind.speed} ${units[units.active].speed}`),
-            $("<p>").text(`UV Index: ${UVIndexData.value}`)
+            $("<p>").html(`UV Index: <span class="uv-index badge">${UVIndexData.value}</span>`)
         );
+
+        // Set color to UV Index
+        let UVIndexRisk = "";
+        if (UVIndexData.value < 3) {
+            UVIndexRisk = "low";
+        } else if (UVIndexData.value >= 3 && UVIndexData.value < 6) {
+            UVIndexRisk = "moderate";
+        } else if (UVIndexData.value >= 6 && UVIndexData.value < 8) {
+            UVIndexRisk = "high";
+        } else if (UVIndexData.value >= 8 && UVIndexData.value < 11) {
+            UVIndexRisk = "very-high";
+        } else if (UVIndexData.value >= 11) {
+            UVIndexRisk = "extreme";
+        }
+        $(".uv-index").addClass(UVIndexRisk);
+
     }
 
     function displayForecast() {

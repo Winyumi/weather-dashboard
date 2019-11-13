@@ -57,6 +57,15 @@ body {
     background: #ffffff;
 }
 
+#dashboard #weather .uv-index.badge {
+    font-size: initial;
+    font-weight: normal;
+}
+#dashboard #weather .uv-index.low { background-color: #3ea72d; color: white; }
+#dashboard #weather .uv-index.moderate { background-color: #fff300; color: black; }
+#dashboard #weather .uv-index.high { background-color: #f18b00; color: black; }
+#dashboard #weather .uv-index.very-high { background-color: #e53210; color: white; }
+#dashboard #weather .uv-index.extreme { background-color: #b567a4; color: white; }
 #dashboard #forecast {
     display: flex;
     flex-wrap: wrap;
